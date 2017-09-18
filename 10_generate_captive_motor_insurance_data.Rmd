@@ -1,0 +1,75 @@
+---
+title: "Generate Captive Motor Insurance Data"
+author: "Mick Cooney"
+date: "1 October 2016"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+    fig_caption: yes
+    theme: cerulean
+  pdf_document: default
+---
+
+
+```{r knit_opts, include = FALSE}
+knitr::opts_chunk$set(tidy = FALSE
+                     ,cache = FALSE
+                     )
+
+library(tidyverse)
+library(feather)
+
+
+options(width = 80
+       ,warn  = 1
+        )
+
+#source("custom_functions.R")
+
+set.seed(42)
+```
+
+# Initialise Country of Operations
+
+```{r }
+bi_params_country_tbl <- tribble(
+    ~country,    ~ll_om, ~ll_th, ~wb_om, ~wb_th, mix_mu, mix_k, dev_sd, sz_shape, sz_rate, 
+   ,"Germany",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"France",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"UK",          1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Ireland",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Spain",       1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Italy",       1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Netherlands", 1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Belgium",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Austria",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Poland",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Portugal",    1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Sweden",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Denmark",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+)
+
+pd_params_country_tbl <- tribble(
+    ~country,    ~ll_om, ~ll_th, ~wb_om, ~wb_th, mix_mu, mix_k, dev_sd, sz_shape, sz_rate, 
+   ,"Germany",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"France",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"UK",          1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Ireland",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Spain",       1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Italy",       1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Netherlands", 1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Belgium",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Austria",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Poland",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Portugal",    1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Sweden",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+   ,"Denmark",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+)
+
+
+```
+
+
+
+
