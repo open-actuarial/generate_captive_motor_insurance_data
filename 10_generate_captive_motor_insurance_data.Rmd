@@ -13,11 +13,19 @@ output:
 
 
 ```{r knit_opts, include = FALSE}
+rm(list = ls())
+
 knitr::opts_chunk$set(tidy = FALSE
                      ,cache = FALSE
+                     ,message = FALSE
+                     ,warning = FALSE
+                     ,fig.height =  8
+                     ,fig.width  = 11
                      )
 
 library(tidyverse)
+library(scales)
+library(cowplot)
 library(feather)
 
 
@@ -32,44 +40,383 @@ set.seed(42)
 
 # Initialise Country of Operations
 
-```{r }
-bi_params_country_tbl <- tribble(
-    ~country,    ~ll_om, ~ll_th, ~wb_om, ~wb_th, mix_mu, mix_k, dev_sd, sz_shape, sz_rate, 
-   ,"Germany",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"France",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"UK",          1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Ireland",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Spain",       1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Italy",       1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Netherlands", 1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Belgium",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Austria",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Poland",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Portugal",    1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Sweden",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Denmark",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+```{r setup_country_data, echo=TRUE}
+loglogistic_func <- function(t, om, th) 1 - exp(-(t/th)^om)
+weibull_func     <- function(t, om, th) t^om / (t^om + th^om)
+
+
+bi_params_country_dev_tbl <- tribble(
+    ~country_code,    ~ll_om, ~ll_th, ~wb_om, ~wb_th, ~mix_mu, ~mix_k, ~dev_sd
+   ,        "DEU",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "FRA",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "GBR",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "IRL",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "ESP",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "ITA",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "NLD",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "BEL",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "AUT",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "POL",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "PRT",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "SWE",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
+   ,        "DNK",      1.50,   2.50,   3.00,   1.50,     0.5,    100,    0.30
 )
 
-pd_params_country_tbl <- tribble(
-    ~country,    ~ll_om, ~ll_th, ~wb_om, ~wb_th, mix_mu, mix_k, dev_sd, sz_shape, sz_rate, 
-   ,"Germany",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"France",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"UK",          1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Ireland",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Spain",       1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Italy",       1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Netherlands", 1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Belgium",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Austria",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Poland",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Portugal",    1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Sweden",      1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
-   ,"Denmark",     1.50,   2.50,   2.50,   1.25,    0.5,   100,   0.30,      100,      10
+pd_params_country_dev_tbl <- tribble(
+    ~country_code,    ~ll_om, ~ll_th, ~wb_om, ~wb_th, ~mix_mu, ~mix_k, ~dev_sd
+   ,        "DEU",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "FRA",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "GBR",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "IRL",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "ESP",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "ITA",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "NLD",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "BEL",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "AUT",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "POL",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "PRT",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "SWE",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
+   ,        "DNK",      0.75,   0.25,   2.50,   1.25,     0.5,    100,    0.30
 )
 
+claim_rate_country_input_tbl <- tribble(
+    ~country_code, ~year, ~rate_mu, ~rate_sd
+   ,        "DEU",  2000,     0.25,     0.05
+   ,        "DEU",  2010,     0.30,     0.05
+   ,        "DEU",  2018,     0.20,     0.05
+   ,        "FRA",  2000,     0.20,     0.05
+   ,        "FRA",  2018,     0.20,     0.05
+   ,        "GBR",  2000,     0.20,     0.05
+   ,        "GBR",  2010,     0.20,     0.05
+   ,        "GBR",  2018,     0.15,     0.05
+   ,        "IRL",  2000,     0.25,     0.05
+   ,        "IRL",  2010,     0.20,     0.05
+   ,        "IRL",  2018,     0.30,     0.05
+   ,        "ESP",  2000,     0.20,     0.05
+   ,        "ESP",  2018,     0.20,     0.05
+   ,        "ITA",  2000,     0.20,     0.05
+   ,        "ITA",  2018,     0.20,     0.05
+   ,        "NLD",  2000,     0.20,     0.05
+   ,        "NLD",  2018,     0.20,     0.05
+   ,        "BEL",  2000,     0.20,     0.05
+   ,        "BEL",  2018,     0.20,     0.05
+   ,        "AUT",  2000,     0.30,     0.05
+   ,        "AUT",  2018,     0.20,     0.05
+   ,        "POL",  2000,     0.35,     0.05
+   ,        "POL",  2018,     0.25,     0.05
+   ,        "PRT",  2000,     0.20,     0.05
+   ,        "PRT",  2018,     0.20,     0.05
+   ,        "SWE",  2000,     0.20,     0.05
+   ,        "SWE",  2018,     0.20,     0.05
+   ,        "DNK",  2000,     0.20,     0.05
+   ,        "DNK",  2018,     0.20,     0.05
+)
+
+
+country_vehicle_adjust_tbl <- tribble(
+    ~country_code,   ~adj_factor
+   ,        "DEU",          1.00
+   ,        "FRA",          0.80
+   ,        "GBR",          1.25
+   ,        "IRL",          1.00
+   ,        "ESP",          0.90
+   ,        "ITA",          0.75
+   ,        "NLD",          1.10
+   ,        "BEL",          1.00
+   ,        "AUT",          1.00
+   ,        "POL",          0.50
+   ,        "PRT",          0.85
+   ,        "SWE",          1.00
+   ,        "DNK",          1.00
+    
+)
+
+claim_split_country_input_tbl <- tribble(
+    ~country_code, ~year, ~bi_prop,  ~bi_only
+   ,        "DEU",  2000,     0.25,      0.10
+   ,        "DEU",  2018,     0.20,      0.10
+   ,        "FRA",  2000,     0.20,      0.10
+   ,        "FRA",  2018,     0.20,      0.10
+   ,        "GBR",  2000,     0.25,      0.10
+   ,        "GBR",  2018,     0.35,      0.10
+   ,        "IRL",  2000,     0.25,      0.10
+   ,        "IRL",  2018,     0.40,      0.10
+   ,        "ESP",  2000,     0.20,      0.10
+   ,        "ESP",  2018,     0.20,      0.10
+   ,        "ITA",  2000,     0.20,      0.10
+   ,        "ITA",  2018,     0.20,      0.10
+   ,        "NLD",  2000,     0.20,      0.10
+   ,        "NLD",  2018,     0.20,      0.10
+   ,        "BEL",  2000,     0.20,      0.10
+   ,        "BEL",  2018,     0.20,      0.10
+   ,        "AUT",  2000,     0.30,      0.10
+   ,        "AUT",  2018,     0.20,      0.10
+   ,        "POL",  2000,     0.35,      0.10
+   ,        "POL",  2018,     0.25,      0.10
+   ,        "PRT",  2000,     0.20,      0.10
+   ,        "PRT",  2018,     0.20,      0.10
+   ,        "SWE",  2000,     0.20,      0.10
+   ,        "SWE",  2018,     0.20,      0.10
+   ,        "DNK",  2000,     0.20,      0.10
+   ,        "DNK",  2018,     0.30,      0.10
+)
+
+claim_size_pd_country_input_tbl <- tribble(
+    ~country_code, ~year, ~size_mu, ~size_sd, ~size_rt
+   ,        "DEU",  2000,     2000,     0.10,     0.01
+   ,        "DEU",  2018,     3000,     0.10,     0.02
+   ,        "FRA",  2000,     2000,     0.10,     0.01
+   ,        "FRA",  2018,     3000,     0.10,     0.01
+   ,        "GBR",  2000,     2000,     0.10,     0.01
+   ,        "GBR",  2018,     4000,     0.10,     0.01
+   ,        "IRL",  2000,     2000,     0.10,     0.01
+   ,        "IRL",  2010,     3000,     0.10,     0.01
+   ,        "IRL",  2018,     3500,     0.10,     0.01
+   ,        "ESP",  2000,     1500,     0.10,     0.01
+   ,        "ESP",  2018,     2500,     0.10,     0.01
+   ,        "ITA",  2000,     2000,     0.10,     0.01
+   ,        "ITA",  2018,     3000,     0.10,     0.01
+   ,        "NLD",  2000,     1500,     0.10,     0.01
+   ,        "NLD",  2018,     2000,     0.10,     0.01
+   ,        "BEL",  2000,     1000,     0.10,     0.01
+   ,        "BEL",  2018,     2000,     0.10,     0.01
+   ,        "AUT",  2000,     1000,     0.10,     0.01
+   ,        "AUT",  2018,     2000,     0.10,     0.01
+   ,        "POL",  2000,      500,     0.10,     0.01
+   ,        "POL",  2018,     1000,     0.10,     0.01
+   ,        "PRT",  2000,     1000,     0.10,     0.01
+   ,        "PRT",  2018,     1500,     0.10,     0.01
+   ,        "SWE",  2000,     2000,     0.10,     0.01
+   ,        "SWE",  2018,     3000,     0.10,     0.01
+   ,        "DNK",  2000,     1000,     0.10,     0.01
+   ,        "DNK",  2018,     2500,     0.10,     0.01
+)
+
+claim_size_bi_country_input_tbl <- tribble(
+    ~country_code, ~year, ~size_mu, ~size_sd, ~size_rt
+   ,        "DEU",  2000,     3000,     0.20,     0.01
+   ,        "DEU",  2018,     5000,     0.20,     0.02
+   ,        "FRA",  2000,     3000,     0.20,     0.01
+   ,        "FRA",  2018,     5000,     0.20,     0.01
+   ,        "GBR",  2000,     3000,     0.20,     0.01
+   ,        "GBR",  2018,     6000,     0.20,     0.01
+   ,        "IRL",  2000,     4000,     0.20,     0.01
+   ,        "IRL",  2010,     5000,     0.20,     0.01
+   ,        "IRL",  2018,     8000,     0.20,     0.01
+   ,        "ESP",  2000,     2000,     0.20,     0.01
+   ,        "ESP",  2018,     3000,     0.20,     0.01
+   ,        "ITA",  2000,     3000,     0.20,     0.01
+   ,        "ITA",  2018,     4000,     0.20,     0.01
+   ,        "NLD",  2000,     2000,     0.20,     0.01
+   ,        "NLD",  2018,     3000,     0.20,     0.01
+   ,        "BEL",  2000,     2000,     0.20,     0.01
+   ,        "BEL",  2018,     3000,     0.20,     0.01
+   ,        "AUT",  2000,     2000,     0.20,     0.01
+   ,        "AUT",  2018,     3000,     0.20,     0.01
+   ,        "POL",  2000,      500,     0.20,     0.01
+   ,        "POL",  2018,     1000,     0.20,     0.01
+   ,        "PRT",  2000,     1000,     0.20,     0.01
+   ,        "PRT",  2018,     2000,     0.20,     0.01
+   ,        "SWE",  2000,     3000,     0.20,     0.01
+   ,        "SWE",  2018,     4000,     0.20,     0.01
+   ,        "DNK",  2000,     3000,     0.20,     0.01
+   ,        "DNK",  2018,     4000,     0.20,     0.01
+)
 
 ```
 
 
+# Create Country Data
+
+```{r construct_data_generation_tables, echo=TRUE}
+data_country_code <- c(bi_params_country_dev_tbl$country_code
+                      ,pd_params_country_dev_tbl$country_code) %>%
+    sort %>%
+    unique
+
+data_min_year <- c(claim_rate_country_input_tbl$year
+                  ,claim_size_bi_country_input_tbl$year
+                  ,claim_size_pd_country_input_tbl$year
+                  ) %>% min
+
+data_max_year <- c(claim_rate_country_input_tbl$year
+                  ,claim_size_bi_country_input_tbl$year
+                  ,claim_size_pd_country_input_tbl$year
+                  ) %>% max
+```
 
 
+```{r project_future_populations, echo=TRUE}
+global_pop_tbl <- read_csv("data/global_pop.csv", skip = 4, col_types = cols()) %>%
+    rename(country_name   = `Country Name`
+          ,country_code   = `Country Code`
+          ,indicator_name = `Indicator Name`
+          ,indicator_code = `Indicator Code`
+           ) %>%
+    select(-X62) %>%
+    gather('year','value', -country_name, -country_code, -indicator_name
+          ,-indicator_code) %>%
+    mutate(year  = year  %>% as.numeric
+          )
+
+country_pop_tbl <- global_pop_tbl %>%
+    filter(year >= data_min_year
+          ,country_code %in% data_country_code)
+
+pop_proj_2017_tbl <- country_pop_tbl %>%
+    filter(year == 2016) %>%
+    mutate(year = 2017
+          ,value = (value * 1.02) %>% round(0) %>% as.integer)
+ 
+pop_proj_2018_tbl <- country_pop_tbl %>%
+    filter(year == 2016) %>%
+    mutate(year = 2018
+          ,value = (value * 1.05) %>% round(0) %>% as.integer)
+
+new_country_pop_tbl <- list(country_pop_tbl
+                           ,pop_proj_2017_tbl
+                           ,pop_proj_2018_tbl) %>%
+    bind_rows()
+```
+
+Now that we have populations for the countries of interest and projected those
+forward for the next few years, we use these populations to calculate the 
+vehicle counts.
+
+
+```{r calculate_vehicle_exposures, echo=TRUE}
+n_entries <- new_country_pop_tbl %>% nrow
+
+country_vehicle_tbl <- new_country_pop_tbl %>%
+    left_join(country_vehicle_adjust_tbl, by = 'country_code') %>%
+    mutate(vehicles = (value * adj_factor * runif(n_entries, 8e-5, 1e-4)) %>%
+                        round(0) %>%
+                        as.integer
+           ) %>%
+    select(country_code, year, vehicles)
+
+
+interp_yearly_params <- function(year, val_label, x_vals) {
+    interp_vals <- approx(x = year, y = x_vals, xout = data_min_year:data_max_year)
+
+    data_frame(year = interp_vals$x, label = val_label, value = interp_vals$y)
+}
+
+country_claim_params_tbl <- claim_size_bi_country_input_tbl %>%
+    left_join(claim_size_pd_country_input_tbl
+             ,by     = c('country_code','year')
+             ,suffix = c('_bi','_pd')) %>%
+    left_join(claim_split_country_input_tbl, by = c('country_code', 'year')) %>%
+    left_join(claim_rate_country_input_tbl,  by = c('country_code', 'year')) %>%
+    group_by(country_code) %>%
+    summarise(pd_mu = list(interp_yearly_params(year, 'size_mu_pd', size_mu_pd))
+             ,pd_sd = list(interp_yearly_params(year, 'size_sd_pd', size_sd_pd))
+             ,pd_rt = list(interp_yearly_params(year, 'size_rt_pd', size_rt_pd))
+             ,bi_mu = list(interp_yearly_params(year, 'size_mu_bi', size_mu_bi))
+             ,bi_sd = list(interp_yearly_params(year, 'size_sd_bi', size_sd_bi))
+             ,bi_rt = list(interp_yearly_params(year, 'size_rt_bi', size_rt_bi))
+             ,bi_prop = list(interp_yearly_params(year, 'bi_prop', bi_prop))
+             ,bi_only = list(interp_yearly_params(year, 'bi_only', bi_only))
+             ,rate_mu = list(interp_yearly_params(year, 'rate_mu', rate_mu))
+             ,rate_sd = list(interp_yearly_params(year, 'rate_sd', rate_sd))
+        ) %>%
+    mutate(data = pmap(list(pd_mu, pd_sd, pd_rt, bi_mu, bi_sd, bi_rt
+                           ,bi_prop, bi_only, rate_mu, rate_sd)
+                      ,bind_rows)) %>%
+    select(country_code, data) %>%
+    unnest %>%
+    spread('label', 'value')
+```
+
+```{r plot_vehicle_exposures, echo=TRUE, fig.height = 14}
+ggplot(country_vehicle_tbl) +
+    geom_line(aes(x = year, y = vehicles)) +
+    expand_limits(y = 0) +
+    facet_wrap(~country_code, scales = 'free_y', ncol = 2) +
+    scale_y_continuous(labels = comma) +
+    xlab("Year") +
+    ylab("Vehicle Count")
+```
+
+
+# Generate Country Claim Data
+
+
+## Generate Count Data
+
+```{r generate_country_claim_counts, echo=TRUE}
+country_claim_data_tbl <- country_claim_params_tbl %>%
+    left_join(country_vehicle_tbl, by = c('country_code','year')) %>%
+    mutate(claimcount_mu = rate_mu * vehicles
+          ,claimcount_sd = rate_sd * vehicles
+          ,claim_count = map2_int(claimcount_mu, claimcount_sd
+                                 ,function(mu, sd) rnorm(1, mu, sd) %>% round(0) %>% as.integer)
+           )
+
+```
+
+We now look at the line trends of the claim counts.
+
+```{r plot_claim_counts, echo=TRUE, fig.height = 14}
+ggplot(country_claim_data_tbl) +
+    geom_line(aes(x = year, y = claim_count)) +
+    expand_limits(y = 0) +
+    facet_wrap(~country_code, scales = 'free_y', ncol = 2) +
+    scale_y_continuous(labels = comma) +
+    xlab("Year") +
+    ylab("Claim Counts")
+```
+
+## Generate Claim Size
+
+```{r generate_claim_size, echo=TRUE}
+generate_claim_data <- function(n_claims, bi_prop, bi_only, bi_mu, bi_rt, bi_sd, pd_mu, pd_rt, pd_sd) {
+    
+    day_offset <- sample(1:365, n_claims, replace = TRUE)
+    
+    mu_vals <- rnorm(n_claims, pd_mu, pd_mu * pd_sd)
+    rt_vals <- rnorm(n_claims, pd_rt, pd_rt * pd_sd)
+
+    pd_claim_size <- map2_dbl(mu_vals * rt_vals, rt_vals, function(x, y) rgamma(1, x, y))
+
+    mu_vals <- rnorm(n_claims, bi_mu, bi_mu * bi_sd)
+    rt_vals <- rnorm(n_claims, bi_rt, bi_rt * bi_sd)
+
+    bi_claim_size <- map2_dbl(mu_vals * rt_vals, rt_vals, function(x, y) rgamma(1, x, y))
+
+    bi_flag <- sample(c(1,0), n_claims, prob = c(bi_prop, 1-bi_prop), replace = TRUE)
+    pd_flag <- sample(c(0,1), n_claims, prob = c(bi_only, 1-bi_only), replace = TRUE)    
+
+    bi_amount <- bi_claim_size * bi_flag
+    pd_amount <- pd_claim_size * (!bi_flag | (bi_flag & pd_flag)) 
+
+    claim_tbl <- data_frame(
+        day_offset   = day_offset
+       ,pd_amount    = pd_amount %>% round(2)
+       ,bi_amount    = bi_amount %>% round(2)
+       ,total_amount = (pd_amount + bi_amount) %>% round(2)
+    )
+
+    return(claim_tbl)
+}
+
+country_claim_data_tbl <- country_claim_data_tbl %>%
+    mutate(size_data = pmap(list(n_claims = claim_count
+                                ,bi_prop  = bi_prop
+                                ,bi_only  = bi_only
+                                ,bi_mu    = size_mu_bi
+                                ,bi_rt    = size_rt_bi
+                                ,bi_sd    = size_sd_bi
+                                ,pd_mu    = size_mu_pd
+                                ,pd_rt    = size_rt_pd
+                                ,pd_sd    = size_sd_pd
+                                )
+                           ,generate_claim_data)) %>%
+    select(country_code, year, size_data) %>%
+    unnest %>%
+    mutate(incident_date = as.Date(paste0(year, '-01-01')) + day_offset) %>%
+    arrange(country_code, year, incident_date) %>%
+    select(country_code, year, incident_date, pd_amount, bi_amount, total_amount)
+
+
+```
