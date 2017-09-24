@@ -6,3 +6,7 @@
 .Rproj.user/
 .Rproj.user
 
+*.html
+
+output/*.csv
+output/*.feather

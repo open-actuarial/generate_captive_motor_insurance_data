@@ -1,7 +1,7 @@
 ---
 title: "Generate Captive Motor Insurance Data"
-author: "Mick Cooney"
-date: "1 October 2016"
+author: "Mick Cooney <mickcooney@gmail.com"
+date: "24 September 2017"
 output:
   html_document:
     toc: true
@@ -24,6 +24,7 @@ library(feather)
 options(width = 80
        ,warn  = 1
         )
+
 
 knitr::knit_hooks$set(timeit = local({
     now = NULL
@@ -59,6 +60,8 @@ set.seed(42)
 # Initialise Country of Operations
 
 ```{r setup_country_data, echo=TRUE}
+data_snapshot_date <- as.Date('2017-06-30')
+
 loglogistic_func <- function(t, om, th) 1 - exp(-(t/th)^om)
 weibull_func     <- function(t, om, th) t^om / (t^om + th^om)
 
@@ -550,6 +553,18 @@ claim_transactions_tbl <- list(pd_trans_tbl, bi_trans_tbl) %>%
 ```
 
 
+# Create Data Snapshots
+
+```{r take_data_snapshot, echo=TRUE}
+snapshot_vehicle_tbl <- country_vehicle_tbl %>%
+    filter(as.Date(paste0(year, '-01-01')) <= data_snapshot_date)
+
+snapshot_transaction_tbl <- claim_transactions_tbl %>%
+    filter(transaction_date <= data_snapshot_date)
+```
+
+
+
 # Write to Disk
 
 ```{r write_data, echo=TRUE}
@@ -560,4 +575,11 @@ write_csv(claim_transactions_tbl, path = 'output/claim_transactions.csv')
 write_feather(country_vehicle_tbl,    path = 'output/vehicle_counts.feather')
 write_feather(claim_data_tbl,         path = 'output/claim_data.feather')
 write_feather(claim_transactions_tbl, path = 'output/claim_transactions.feather')
+
+### Write data snapshot
+write_csv(snapshot_vehicle_tbl,     path = 'output/snapshot_vehicle.csv')
+write_csv(snapshot_transaction_tbl, path = 'output/snapshot_transaction.csv')
+
+write_feather(snapshot_vehicle_tbl,     path = 'output/snapshot_vehicle.feather')
+write_feather(snapshot_transaction_tbl, path = 'output/snapshot_transaction.feather')
 ```
