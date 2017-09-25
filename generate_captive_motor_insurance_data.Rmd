@@ -101,36 +101,36 @@ pd_params_country_dev_tbl <- tribble(
 )
 
 claim_rate_country_input_tbl <- tribble(
-    ~country_code, ~year, ~rate_mu, ~rate_sd
-   ,        "DEU",  2000,     0.25,     0.05
-   ,        "DEU",  2010,     0.30,     0.05
-   ,        "DEU",  2018,     0.20,     0.05
-   ,        "FRA",  2000,     0.20,     0.05
-   ,        "FRA",  2018,     0.20,     0.05
-   ,        "GBR",  2000,     0.20,     0.05
-   ,        "GBR",  2010,     0.20,     0.05
-   ,        "GBR",  2018,     0.15,     0.05
-   ,        "IRL",  2000,     0.25,     0.05
-   ,        "IRL",  2010,     0.20,     0.05
-   ,        "IRL",  2018,     0.30,     0.05
-   ,        "ESP",  2000,     0.20,     0.05
-   ,        "ESP",  2018,     0.20,     0.05
-   ,        "ITA",  2000,     0.20,     0.05
-   ,        "ITA",  2018,     0.20,     0.05
-   ,        "NLD",  2000,     0.20,     0.05
-   ,        "NLD",  2018,     0.20,     0.05
-   ,        "BEL",  2000,     0.20,     0.05
-   ,        "BEL",  2018,     0.20,     0.05
-   ,        "AUT",  2000,     0.30,     0.05
-   ,        "AUT",  2018,     0.20,     0.05
-   ,        "POL",  2000,     0.35,     0.05
-   ,        "POL",  2018,     0.25,     0.05
-   ,        "PRT",  2000,     0.20,     0.05
-   ,        "PRT",  2018,     0.20,     0.05
-   ,        "SWE",  2000,     0.20,     0.05
-   ,        "SWE",  2018,     0.20,     0.05
-   ,        "DNK",  2000,     0.20,     0.05
-   ,        "DNK",  2018,     0.20,     0.05
+    ~country_code, ~year, ~rate_mu, ~rate_sd, ~rep_mu, ~rep_sd 
+   ,        "DEU",  2000,     0.25,     0.05,    2.30,    1.00
+   ,        "DEU",  2010,     0.30,     0.05,    2.50,    1.00
+   ,        "DEU",  2018,     0.20,     0.05,    2.30,    0.80
+   ,        "FRA",  2000,     0.20,     0.05,    2.50,    1.00
+   ,        "FRA",  2018,     0.20,     0.05,    2.30,    1.00
+   ,        "GBR",  2000,     0.20,     0.05,    2.70,    1.00
+   ,        "GBR",  2010,     0.20,     0.05,    2.50,    1.00
+   ,        "GBR",  2018,     0.15,     0.05,    2.30,    1.00
+   ,        "IRL",  2000,     0.25,     0.05,    2.30,    1.00
+   ,        "IRL",  2010,     0.20,     0.05,    2.50,    1.30
+   ,        "IRL",  2018,     0.30,     0.05,    2.10,    0.80
+   ,        "ESP",  2000,     0.20,     0.05,    2.30,    1.00
+   ,        "ESP",  2018,     0.20,     0.05,    2.30,    1.00
+   ,        "ITA",  2000,     0.20,     0.05,    2.30,    1.00
+   ,        "ITA",  2018,     0.20,     0.05,    2.30,    1.00
+   ,        "NLD",  2000,     0.20,     0.05,    2.30,    1.00
+   ,        "NLD",  2018,     0.20,     0.05,    2.00,    1.00
+   ,        "BEL",  2000,     0.20,     0.05,    2.30,    1.00
+   ,        "BEL",  2018,     0.20,     0.05,    2.00,    1.00
+   ,        "AUT",  2000,     0.30,     0.05,    2.30,    1.00
+   ,        "AUT",  2018,     0.20,     0.05,    2.00,    0.90
+   ,        "POL",  2000,     0.35,     0.05,    2.50,    1.00
+   ,        "POL",  2018,     0.25,     0.05,    2.30,    1.00
+   ,        "PRT",  2000,     0.20,     0.05,    2.50,    1.00
+   ,        "PRT",  2018,     0.20,     0.05,    2.30,    1.00
+   ,        "SWE",  2000,     0.20,     0.05,    2.30,    1.00
+   ,        "SWE",  2018,     0.20,     0.05,    2.00,    1.00
+   ,        "DNK",  2000,     0.20,     0.05,    2.50,    1.00
+   ,        "DNK",  2018,     0.20,     0.05,    2.30,    1.00
 )
 
 
@@ -183,34 +183,34 @@ claim_split_country_input_tbl <- tribble(
 )
 
 claim_size_pd_country_input_tbl <- tribble(
-    ~country_code, ~year, ~size_mu, ~size_sd, ~size_rt
-   ,        "DEU",  2000,     2000,     0.10,    0.001
-   ,        "DEU",  2018,     3000,     0.10,    0.002
-   ,        "FRA",  2000,     2000,     0.10,    0.001
-   ,        "FRA",  2018,     3000,     0.10,    0.001
-   ,        "GBR",  2000,     2000,     0.10,    0.001
-   ,        "GBR",  2018,     4000,     0.10,    0.001
-   ,        "IRL",  2000,     2000,     0.10,    0.001
-   ,        "IRL",  2010,     3000,     0.10,    0.001
-   ,        "IRL",  2018,     3500,     0.10,    0.001
-   ,        "ESP",  2000,     1500,     0.10,    0.001
-   ,        "ESP",  2018,     2500,     0.10,    0.001
-   ,        "ITA",  2000,     2000,     0.10,    0.001
-   ,        "ITA",  2018,     3000,     0.10,    0.001
-   ,        "NLD",  2000,     1500,     0.10,    0.001
-   ,        "NLD",  2018,     2000,     0.10,    0.001
-   ,        "BEL",  2000,     1000,     0.10,    0.001
-   ,        "BEL",  2018,     2000,     0.10,    0.001
-   ,        "AUT",  2000,     1000,     0.10,    0.001
-   ,        "AUT",  2018,     2000,     0.10,    0.001
-   ,        "POL",  2000,      500,     0.10,    0.001
-   ,        "POL",  2018,     1000,     0.10,    0.001
-   ,        "PRT",  2000,     1000,     0.10,    0.001
-   ,        "PRT",  2018,     1500,     0.10,    0.001
-   ,        "SWE",  2000,     2000,     0.10,    0.001
-   ,        "SWE",  2018,     3000,     0.10,    0.001
-   ,        "DNK",  2000,     1000,     0.10,    0.001
-   ,        "DNK",  2018,     2500,     0.10,    0.001
+    ~country_code, ~year, ~size_mu, ~size_sd, ~size_rt, ~min_claim_size
+   ,        "DEU",  2000,     2000,     0.10,    0.001,           50.00
+   ,        "DEU",  2018,     3000,     0.10,    0.002,          100.00
+   ,        "FRA",  2000,     2000,     0.10,    0.001,           50.00
+   ,        "FRA",  2018,     3000,     0.10,    0.001,          100.00
+   ,        "GBR",  2000,     2000,     0.10,    0.001,           50.00
+   ,        "GBR",  2018,     4000,     0.10,    0.001,          100.00
+   ,        "IRL",  2000,     2000,     0.10,    0.001,           50.00
+   ,        "IRL",  2010,     3000,     0.10,    0.001,          100.00
+   ,        "IRL",  2018,     3500,     0.10,    0.001,           75.00
+   ,        "ESP",  2000,     1500,     0.10,    0.001,           50.00
+   ,        "ESP",  2018,     2500,     0.10,    0.001,          100.00
+   ,        "ITA",  2000,     2000,     0.10,    0.001,           50.00
+   ,        "ITA",  2018,     3000,     0.10,    0.001,           75.00
+   ,        "NLD",  2000,     1500,     0.10,    0.001,           50.00
+   ,        "NLD",  2018,     2000,     0.10,    0.001,          100.00
+   ,        "BEL",  2000,     1000,     0.10,    0.001,           50.00
+   ,        "BEL",  2018,     2000,     0.10,    0.001,          100.00
+   ,        "AUT",  2000,     1000,     0.10,    0.001,           50.00
+   ,        "AUT",  2018,     2000,     0.10,    0.001,          100.00
+   ,        "POL",  2000,      500,     0.10,    0.001,           25.00
+   ,        "POL",  2018,     1000,     0.10,    0.001,           50.00
+   ,        "PRT",  2000,     1000,     0.10,    0.001,           30.00
+   ,        "PRT",  2018,     1500,     0.10,    0.001,           80.00
+   ,        "SWE",  2000,     2000,     0.10,    0.001,           50.00
+   ,        "SWE",  2018,     3000,     0.10,    0.001,          100.00
+   ,        "DNK",  2000,     1000,     0.10,    0.001,           50.00
+   ,        "DNK",  2018,     2500,     0.10,    0.001,          100.00
 )
 
 claim_size_bi_country_input_tbl <- tribble(
@@ -340,9 +340,12 @@ country_claim_params_tbl <- claim_size_bi_country_input_tbl %>%
              ,bi_only = list(interp_yearly_params(year, 'bi_only', bi_only))
              ,rate_mu = list(interp_yearly_params(year, 'rate_mu', rate_mu))
              ,rate_sd = list(interp_yearly_params(year, 'rate_sd', rate_sd))
+             ,rep_mu  = list(interp_yearly_params(year, 'rep_mu',  rep_mu))
+             ,rep_sd  = list(interp_yearly_params(year, 'rep_sd',  rep_sd))
+             ,min_sz  = list(interp_yearly_params(year, 'min_claim_size', min_claim_size))
         ) %>%
     mutate(data = pmap(list(pd_mu, pd_sd, pd_rt, bi_mu, bi_sd, bi_rt
-                           ,bi_prop, bi_only, rate_mu, rate_sd)
+                           ,bi_prop, bi_only, rate_mu, rate_sd, rep_mu, rep_sd, min_sz)
                       ,bind_rows)) %>%
     select(country_code, data) %>%
     unnest %>%
@@ -391,10 +394,12 @@ ggplot(claim_simtable_tbl) +
 ## Generate Claim Size
 
 ```{r generate_claim_size, echo=TRUE}
-generate_claim_data <- function(n_claims, bi_prop, bi_only, bi_mu, bi_rt, bi_sd, pd_mu, pd_rt, pd_sd) {
+generate_claim_data <- function(n_claims, bi_prop, bi_only, bi_mu, bi_rt, bi_sd, pd_mu, pd_rt, pd_sd, rep_mu, rep_sd) {
     
     day_offset <- sample(1:365, n_claims, replace = TRUE)
-    
+
+    rep_delay  <- rlnorm(n_claims, rep_mu, rep_sd) %>% as.integer
+        
     mu_vals <- pd_mu * rlnorm(n_claims, 0, pd_sd)
     rt_vals <- pd_rt * rlnorm(n_claims, 0, pd_sd)
 
@@ -413,6 +418,7 @@ generate_claim_data <- function(n_claims, bi_prop, bi_only, bi_mu, bi_rt, bi_sd,
 
     claim_tbl <- data_frame(
         day_offset   = day_offset
+       ,rep_delay    = rep_delay
        ,pd_amount    = pd_amount %>% round(2)
        ,bi_amount    = bi_amount %>% round(2)
        ,total_amount = (pd_amount + bi_amount) %>% round(2)
@@ -431,18 +437,22 @@ claim_data_tbl <- claim_simtable_tbl %>%
                                 ,pd_mu    = size_mu_pd
                                 ,pd_rt    = size_rt_pd
                                 ,pd_sd    = size_sd_pd
+                                ,rep_mu   = rep_mu
+                                ,rep_sd   = rep_sd
                                 )
                            ,generate_claim_data)) %>%
-    select(country_code, year, size_data) %>%
+    select(country_code, year, min_claim_size, size_data) %>%
     unnest %>%
+    filter(total_amount >= min_claim_size) %>%
     mutate(incident_date = as.Date(paste0(year, '-01-01')) + day_offset
+          ,report_date   = incident_date + rep_delay
           ,ym_label      = format(incident_date, '%Y%m')
            ) %>%
     arrange(country_code, year, incident_date) %>%
     group_by(country_code, ym_label) %>%
     mutate(claim_id = sprintf("%s%sCL%04d", country_code, ym_label, 1:n())) %>%
     ungroup() %>%
-    select(country_code, year, incident_date, claim_id, pd_amount, bi_amount, total_amount)
+    select(country_code, year, incident_date, report_date, claim_id, pd_amount, bi_amount, total_amount)
 ```
 
 Now that we have generated the ultimate claim amounts we want to take a quick
@@ -459,6 +469,16 @@ ggplot(claim_data_tbl) +
 
 
 # Create Claims Transactions
+
+Having calculated the ultimate severities of all the claims, we now want to
+generate the reporting of those claims in a realistic manner.
+
+Claims develop over time, and we want to produce a development path for each
+claim so that we have a more realistic set of data where we do not have
+complete information about the liabilities at a given point in time.
+
+We also have a mechanism whereby BI claims have a longer development time than
+property damage (PD).
 
 ```{r create_claim_transaction_generation, echo=TRUE}
 create_transaction_function <- function(params_tbl, time_vals) {
@@ -515,6 +535,7 @@ create_transaction_function <- function(params_tbl, time_vals) {
     
             dev_tbl <- dev_tbl %>%
                 filter(time > 0) %>%
+                mutate(amount = amount %>% round(2)) %>%
                 select(time, amount)
         }
         
@@ -532,24 +553,26 @@ generate_bi_development <- create_transaction_function(bi_params_country_dev_tbl
 
 ```{r create_claim_development_data, echo=TRUE}
 claim_dev_data_tbl <- claim_data_tbl %>%
+#    filter(year >= 2015) %>%
     mutate(pd_dev = map2(country_code, pd_amount, generate_pd_development)
           ,bi_dev = map2(country_code, bi_amount, generate_bi_development)
            )
 
 pd_trans_tbl <- claim_dev_data_tbl %>%
-    select(claim_id, incident_date, pd_dev) %>%
+    select(country_code, year, claim_id, incident_date, report_date, pd_dev) %>%
     unnest %>%
     mutate(claim_type = 'PD')
 
 bi_trans_tbl <- claim_dev_data_tbl %>%
-    select(claim_id, incident_date, bi_dev) %>%
+    select(country_code, year, claim_id, incident_date, report_date, bi_dev) %>%
     unnest %>%
     mutate(claim_type = 'BI')
 
 claim_transactions_tbl <- list(pd_trans_tbl, bi_trans_tbl) %>%
     bind_rows() %>%
     mutate(transaction_date = incident_date + time * 365) %>%
-    select(claim_id, incident_date, transaction_date, claim_type, amount)
+    filter(transaction_date >= report_date) %>%
+    select(country_code, year, claim_id, incident_date, report_date, transaction_date, claim_type, amount)
 ```
 
 
